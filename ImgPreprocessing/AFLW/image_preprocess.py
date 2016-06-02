@@ -1,12 +1,12 @@
-''' 
-Author: nipunshrivastav 
+'''
+Author: nipunshrivastav
 Description: This python script was taken from https://github.com/guoyilin/FaceDetection_CNN
 Inputs: It takes location of ALFW dataset to append to imagePath and face_rect.txt (which is assumed to be in the same folder as the python script). You also need to specify the folder in which the data is in the path
-Outputs: 
-Help:  
-Dependencies: PIL, numpy, random. 
+Outputs:
+Help:
+Dependencies: PIL, numpy, random.
 
-''' 
+'''
 
 from PIL import Image
 from operator import itemgetter
@@ -85,6 +85,10 @@ def OnlineSampleGeneration(imagePath, faces, count, negSampleProb):
                         crop.save("crop_images/face/" + imageName + "_" + str(count) + ".jpg")
                         output.write("crop_images/face/" + imageName + "_" + str(count) + ".jpg" + " " + str(IoU) + "\n")
                         count += 1
+                        inv_crop = crop.transpose(Image.FLIP_LEFT_RIGHT)
+                        inv_crop.save("crop_images/face/" + imageName + "_" + str(count) + ".jpg")
+                        output.write("crop_images/face/" + imageName + "_" + str(count) + ".jpg" + " " + str(IoU) + "\n")
+                        count += 1
                         iou_face = True
                 if(iou_face):
                     continue
@@ -144,23 +148,22 @@ if __name__ == "__main__":
 
 
     #del the proprocess image.
-########################################### 
+###########################################
    #has_pro = open('aflw.list5', 'r')
    # for line in has_pro.readlines():
 #	has_image = line.split(' ')[0].split('/')[-1].split('_')[0] + '.jpg'
  #       if('flickr/3/' + has_image in imageFaces):
  	   # print has_image
 #	    imageFaces.pop('flickr/3/' + has_image, None)
-#	elif('flickr/0/' + has_image in imageFaces): 
+#	elif('flickr/0/' + has_image in imageFaces):
 	   # print has_image
  #           imageFaces.pop('flickr/0/' + has_image, None)
-       # elif('flickr/2/' + has_image in imageFaces): 
+       # elif('flickr/2/' + has_image in imageFaces):
            # print has_image
          #   imageFaces.pop('flickr/2/' + has_image, None)
 #####################################
     count = 0
     for imagePath, faces in imageFaces.iteritems():
-        path = r'/misc/buffer/Softwares/MachineLearning_Data/Object Detector/Face Detection/aflw/data/'
         count = OnlineSampleGeneration(imagePath, faces, count, negSampleProb)
         print imagePath
         print(count)
